@@ -65,7 +65,7 @@ public class AppsAdapterIn extends RecyclerView.Adapter<AppsAdapterIn.MyViewHold
         holder.channel.setText(video_info.getChannelName());
         holder.views.setText(video_info.getViews());
         holder.time.setText(video_info.getTime());
-        Log.i("GLOIDE"," url : "+holder.thumburl);
+        Log.i("GLOIDE","  url : "+holder.thumburl);
 
         Glide .with(mainActivity)
                 .load(video_info.getThumbNailUrl())
