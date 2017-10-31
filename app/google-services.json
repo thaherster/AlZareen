@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1031896493097",
+    "firebase_url": "https://alzareen-618d9.firebaseio.com",
+    "project_id": "alzareen-618d9",
+    "storage_bucket": "alzareen-618d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031896493097:android:0320a302bf4e12ec",
+        "android_client_info": {
+          "package_name": "com.mainacreations.zareen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1031896493097-ej0560hjk0b66239aeus3tr5il1rv37a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mainacreations.zareen",
+            "certificate_hash": "345393931b5f1b6193eedb964c71f72ec05db0d6"
+          }
+        },
+        {
+          "client_id": "1031896493097-2qbsjskbl6f073b6kg7cq259o2b5fafh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuHzeh3Ms-gnytW_onLPYZk_PAl-JJoSc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1031896493097-2qbsjskbl6f073b6kg7cq259o2b5fafh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

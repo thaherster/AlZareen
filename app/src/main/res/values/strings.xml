@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Al Zareen</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="banner_ad_unit_id">ca-app-pub-4937731866127113/6528771295</string>
+
+</resources>
