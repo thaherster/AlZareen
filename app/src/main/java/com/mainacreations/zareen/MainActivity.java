@@ -78,19 +78,21 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     @Override
     protected void onResume() {
         super.onResume();
-        mAuth.signInAnonymously().addOnSuccessListener(this, new  OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                getdata();                }
-        })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(MainActivity.this, "signInAnonymously:FAILURE" + exception,Toast.LENGTH_LONG).show();
-                        Log.d("APKURL","signInAnonymously:FAILURE" + exception);
-                    }
-                });
-    }
+//        mAuth.signInAnonymously().addOnSuccessListener(this, new  OnSuccessListener<AuthResult>() {
+//            @Override
+//            public void onSuccess(AuthResult authResult) {
+//                getdata();                }
+//        })
+//                .addOnFailureListener(this, new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        Toast.makeText(MainActivity.this, "signInAnonymously:FAILURE" + exception,Toast.LENGTH_LONG).show();
+//                        Log.d("APKURL","signInAnonymously:FAILURE" + exception);
+//                    }
+//                });
+        getdata();
+
+}
 
     public void   getdata() {
         Log.d("APKURL","getdata");
@@ -111,8 +113,12 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                     app.setVideoName((String) newmap.get("VideoName"));
                     app.setCode((String) newmap.get("Code"));
                     app.setChannelName((String) newmap.get("ChannelName"));
-                    app.setTime((String) newmap.get("Time"));
-                    app.setViews((String) newmap.get("Views"));
+                    String time = Utils.MyDateFromat((String) newmap.get("Time"));
+                    app.setTime(time);
+                    String str = (String)newmap.get("Views").toString().trim();
+                    String viw = Utils.format(Long.valueOf(str));
+                    Log.i("LVIWS"," : "+viw);
+                    app.setViews(viw);
                     app.setThumbNailUrl((String) newmap.get("ThumbNailUrl"));
 
                     videos.add(app);
