@@ -22,6 +22,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +62,8 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         playerStateChangeListener = new MyPlayerStateChangeListener();
         playbackEventListener = new MyPlaybackEventListener();
         videos =  new ArrayList<>();
+        videos.clear();
+
         mAuth = FirebaseAuth.getInstance();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -98,17 +101,46 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         Log.d("APKURL","getdata");
 
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("APKURL","onComplete");
-                videos.clear();
+//        myRef.orderByKey().addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.d("APKURL","onComplete");
+//
+//                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+//                    Log.d("APKURL",postSnapshot.getRef().toString());
+//                    Log.d("APKURL",postSnapshot.toString());
+//                    HashMap newmap = (HashMap) postSnapshot.getValue();
+//                    Log.d("APKURL",newmap.toString());
+//                    Video_Info app =  new Video_Info();
+//                    app.setVideoName((String) newmap.get("VideoName"));
+//                    app.setCode((String) newmap.get("Code"));
+//                    app.setChannelName((String) newmap.get("ChannelName"));
+//                    String time = Utils.MyDateFromat((String) newmap.get("Time"));
+//                    app.setTime(time);
+//                    String str = (String)newmap.get("Views").toString().trim();
+//                    String viw = Utils.format(Long.valueOf(str));
+//                    Log.i("LVIWS"," : "+viw);
+//                    app.setViews(viw);
+//                    app.setThumbNailUrl((String) newmap.get("ThumbNailUrl"));
+//
+//                    videos.add(app);
+//                }
+//                mAdapter.notifyDataSetChanged();
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.d("APKURL","Cancelled");
+//            }
+//        });
 
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Log.d("APKURL",postSnapshot.getRef().toString());
-                    Log.d("APKURL",postSnapshot.toString());
-                    HashMap newmap = (HashMap) postSnapshot.getValue();
-                    Log.d("APKURL",newmap.toString());
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.i("ADDED"," "+s);
+                Log.d("ADDED",dataSnapshot.getRef().toString());
+                    Log.d("ADDED",dataSnapshot.toString());
+                    HashMap newmap = (HashMap) dataSnapshot.getValue();
+                    Log.d("ADDED",newmap.toString());
                     Video_Info app =  new Video_Info();
                     app.setVideoName((String) newmap.get("VideoName"));
                     app.setCode((String) newmap.get("Code"));
@@ -117,17 +149,34 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                     app.setTime(time);
                     String str = (String)newmap.get("Views").toString().trim();
                     String viw = Utils.format(Long.valueOf(str));
-                    Log.i("LVIWS"," : "+viw);
+                    Log.i("ADDED"," : "+viw);
                     app.setViews(viw);
                     app.setThumbNailUrl((String) newmap.get("ThumbNailUrl"));
+                    Log.i("ADDED"," url : "+app.getThumbNailUrl());
 
                     videos.add(app);
-                }
                 mAdapter.notifyDataSetChanged();
+
             }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("APKURL","Cancelled");
+
             }
         });
     }
