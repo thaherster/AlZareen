@@ -133,7 +133,7 @@ public class HomeActivity extends AppCompatActivity {
                     String str = (String)newmap.get("Views").toString().trim();
                     String viw = Utils.format(Long.valueOf(str));
                     Log.i("ADDED"," : "+viw);
-                    app.setViews(viw);
+                    app.setViews(viw+" views");
                     app.setThumbNailUrl((String) newmap.get("ThumbNailUrl"));
                     Log.i("ADDED"," url : "+app.getThumbNailUrl());
 
@@ -205,7 +205,8 @@ public class HomeActivity extends AppCompatActivity {
                     String str = (String)newmap.get("Views").toString().trim();
                     String viw = Utils.format(Long.valueOf(str));
                     Log.i("ADDED"," : "+viw);
-                    app.setViews(viw);
+
+                    app.setViews(viw+" views");
                     app.setThumbNailUrl((String) newmap.get("ThumbNailUrl"));
                     Log.i("ADDED"," url : "+app.getThumbNailUrl());
 
