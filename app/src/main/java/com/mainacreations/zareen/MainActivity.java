@@ -2,15 +2,21 @@ package com.mainacreations.zareen;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -33,14 +39,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener  {
+public class MainActivity extends AppCompatActivity  {
 
     private static final int RECOVERY_REQUEST = 1;
-    private YouTubePlayerView youTubeView;
+    private VideoView youTubeView;
     private AdView mAdView;
 
-    private MyPlayerStateChangeListener playerStateChangeListener;
-    private MyPlaybackEventListener playbackEventListener;
     Video_Info video_info;
     private ArrayList<Video_Info> videos;
     private RecyclerView recyclerView;
@@ -48,13 +52,15 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     FirebaseAuth mAuth;
     DatabaseReference myRef;
     String playing = "";
-    YouTubePlayer mPlayer;
+    private MediaController mediacontroller;
+
     private static final int TOTAL_ITMES_TO_LOAD=5;
     private int mCurrentPage =1;
     boolean mIsLoading = false;
     String lastkey="";
     Boolean endoflist=false;
     LinearLayoutManager mLayoutManager;
+    TextView title;
 
     int pos = 0;
     @Override
@@ -62,14 +68,13 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
-        youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
+        youTubeView = (VideoView) findViewById(R.id.youtube_view);
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         video_info = (Video_Info) getIntent().getSerializableExtra("Video_Info");
-        playerStateChangeListener = new MyPlayerStateChangeListener();
-        playbackEventListener = new MyPlaybackEventListener();
+         title = (TextView)findViewById(R.id.titlexxx);
+       title.setText(video_info.getVideoName());
         videos =  new ArrayList<>();
         videos.clear();
 
@@ -84,6 +89,45 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         videos.clear();
+
+        pos = 0;
+        getdata();
+
+
+
+        try {
+
+            // Start the MediaController
+            mediacontroller = new MediaController(this);
+            mediacontroller.setAnchorView(youTubeView);
+
+            // Get the URL from String VideoURL
+            Uri video = Uri.parse(video_info.getCode());
+            youTubeView.setMediaController(mediacontroller);
+            youTubeView.setVideoURI(video);
+
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+
+        }
+
+        youTubeView.requestFocus();
+        youTubeView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            // Close the progress bar and play the video
+            public void onPrepared(MediaPlayer mp) {
+
+                youTubeView.start();
+            }
+        });
+        youTubeView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+
+                return false;
+            }
+        });
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
 
@@ -111,8 +155,6 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
                 }
             }
         });
-        pos = 0;
-        getdata();
 
     }
 
@@ -282,42 +324,20 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
-        youTubePlayer.setPlayerStateChangeListener(playerStateChangeListener);
-        youTubePlayer.setPlaybackEventListener(playbackEventListener);
-            if (!wasRestored) {
-                if (!video_info.getCode().isEmpty()) {
-                    mPlayer = youTubePlayer;
-                    mPlayer.cueVideo(video_info.getCode().trim());
-                    // Plays https://www.youtube.com/watch?v=fhWaJi1Hsfo}
-                    playing =video_info.getCode().trim();
-                }
-            }
-    }
 
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-        if (youTubeInitializationResult.isUserRecoverableError()) {
-            youTubeInitializationResult.getErrorDialog(this, RECOVERY_REQUEST).show();
-        } else {
-            String error = String.format("error : ", youTubeInitializationResult.toString());
-            Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-        }
-    }
+
+
+
+
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RECOVERY_REQUEST) {
             // Retry initialization if user performed a recovery action
-            getYouTubePlayerProvider().initialize(Config.YOUTUBE_API_KEY, this);
         }
     }
 
-    protected YouTubePlayer.Provider getYouTubePlayerProvider() {
-        return youTubeView;
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -325,10 +345,45 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
     }
 
     public void startVideo(Video_Info video_info) {
-        if( mPlayer != null ) {
+        if( youTubeView != null ) {
             if(!playing.trim().equals(video_info.getCode().trim()))
-            {mPlayer.cueVideo(video_info.getCode());}
+            {
+
+                try {
+
+                    // Start the MediaController
+
+                    // Get the URL from String VideoURL
+                    Uri video = Uri.parse(video_info.getCode());
+                    youTubeView.setMediaController(mediacontroller);
+                    youTubeView.setVideoURI(video);
+
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+
+                }
+
+                youTubeView.requestFocus();
+                youTubeView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    // Close the progress bar and play the video
+                    public void onPrepared(MediaPlayer mp) {
+
+                        youTubeView.start();
+                    }
+                });
+                youTubeView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+
+                        return false;
+                    }
+                });
+
+            }
             playing= video_info.getCode().trim();
+            title.setText(video_info.getVideoName());
+
         }
     }
 }

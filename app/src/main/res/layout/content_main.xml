@@ -9,8 +9,7 @@
     tools:context="com.mainacreations.zareen.MainActivity"
     tools:showIn="@layout/activity_main">
 
-
-    <com.google.android.youtube.player.YouTubePlayerView
+    <VideoView
         android:id="@+id/youtube_view"
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
@@ -36,5 +35,6 @@
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
+
 
     </RelativeLayout>

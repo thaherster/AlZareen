@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class AppsAdapterIn extends RecyclerView.Adapter<AppsAdapterIn.MyViewHold
     MainActivity mainActivity;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, channel,views , time;
+        public TextView title, channel , time;
         public String code;
         public ImageView thumb;
         public String thumburl;
@@ -33,7 +34,7 @@ public class AppsAdapterIn extends RecyclerView.Adapter<AppsAdapterIn.MyViewHold
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             channel = (TextView) view.findViewById(R.id.channel);
-            views = (TextView) view.findViewById(R.id.views);
+//            views = (TextView) view.findViewById(R.id.views);
             time = (TextView) view.findViewById(R.id.time);
             thumb = (ImageView) view.findViewById(R.id.thumb);
 
@@ -63,12 +64,14 @@ public class AppsAdapterIn extends RecyclerView.Adapter<AppsAdapterIn.MyViewHold
         holder.video_info = video_info;
         holder.title.setText(video_info.getVideoName());
         holder.channel.setText(video_info.getChannelName());
-        holder.views.setText(video_info.getViews());
+//        holder.views.setText(video_info.getViews());
         holder.time.setText(video_info.getTime());
         Log.i("GLOIDE","  url : "+holder.thumburl);
 
         Glide .with(mainActivity)
                 .load(video_info.getThumbNailUrl())
+                .apply(new RequestOptions()
+                        .placeholder(R.mipmap.ic_launcher))
                 .into(holder.thumb);
 
         holder.ll1.setOnClickListener(new View.OnClickListener() {
