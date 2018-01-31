@@ -36,9 +36,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             channel = (TextView) view.findViewById(R.id.channel);
-            views = (TextView) view.findViewById(R.id.views);
-            time = (TextView) view.findViewById(R.id.time);
-            thumb = (ImageView) view.findViewById(R.id.thumb);
+//            views = (TextView) view.findViewById(R.id.views);
+//            time = (TextView) view.findViewById(R.id.time);
+//            thumb = (ImageView) view.findViewById(R.id.thumb);
 
             ll1 = (LinearLayout) view.findViewById(R.id.ll1);
             video_info = new Video_Info();
@@ -67,12 +67,12 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         holder.video_info = video_info;
         holder.title.setText(video_info.getVideoName());
         holder.channel.setText(video_info.getChannelName());
-        holder.views.setText(video_info.getViews());
-        holder.time.setText(video_info.getTime());
-        Log.i("GLOIDE"," url : "+holder.thumburl);
-        Glide.with(mainActivity)
-                .load(video_info.getThumbNailUrl())
-                .into(holder.thumb);
+//        holder.views.setText(video_info.getViews());
+//        holder.time.setText(video_info.getTime());
+//        Log.i("GLOIDE"," url : "+holder.thumburl);
+//        Glide.with(mainActivity)
+//                .load(video_info.getThumbNailUrl())
+//                .into(holder.thumb);
         holder.ll1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
